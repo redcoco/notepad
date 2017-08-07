@@ -50,8 +50,8 @@ scrapy 信号
 # 第3章 爬虫基础知识回顾
 ***
 ### 技术选型 爬虫能做什么
-* `scrapy vs  requests ＋beautifulsoup`
-1. `requests 和 beautifulsoup 都是库，scrapy 是框架`
+* scrapy vs  requests ＋beautifulsoup
+1. requests 和 beautifulsoup 都是库，scrapy 是框架
 2. scrapy 框架中可以加入requests 和 beautifulsoup
 3. scrapy 基于twisted ，性能是最大优势
 4. scrapy 方便扩展，提供了很多内置的功能
