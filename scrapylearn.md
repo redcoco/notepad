@@ -35,3 +35,31 @@ scrapy 信号
 
 # 第2章 windows下搭建开发环境
 ***
+### IDE  pycharm的安装使用
+### 数据库  mysql和navicat的安装和使用
+### windows 和linux下安装python2 和python3
+### virtualenv 和 virtual恶女wrapper虚拟环境的安装和配置
+* pip install -i https://pypi.douan.com/simple/ virtualenv
+* pip uninstall virtualenv
+* pip install -i https://pypi.douan.com/simple/ virtualenvwrapper
+* mkvirtualenv  --python = 路径 ppp     
+* workon ppp 
+* deactivate
+***
+
+# 第3章 爬虫基础知识回顾
+***
+### 技术选型 爬虫能做什么
+* scrapy requests ＋　
+* 
+
+***
+### 正则表达式
+***
+### 深度优先和广度优先原理
+***
+### url去重方法
+***
+### 彻底搞清楚unicode和utf8编码
+***
+
