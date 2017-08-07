@@ -50,9 +50,21 @@ scrapy 信号
 # 第3章 爬虫基础知识回顾
 ***
 ### 技术选型 爬虫能做什么
-* scrapy requests ＋　
-* 
-
+* `scrapy vs  requests ＋beautifulsoup`
+1. `requests 和 beautifulsoup 都是库，scrapy 是框架`
+2. scrapy 框架中可以加入requests 和 beautifulsoup
+3. scrapy 基于twisted ，性能是最大优势
+4. scrapy 方便扩展，提供了很多内置的功能
+5. scrapy 内置的css和xpath selector 非常方便，beautifulsoup 最大的缺点是慢
+* 网页分类
+1. 静态网页
+2. 动态网页
+3. webservice（restapi）
+* 爬虫能做什么
+1. 搜索引擎 -- 百度。google、垂直领域搜索引擎
+2. 推荐引擎 -- 今日头条
+3. 机器学习的数据样本
+4. 数据分析（金融数据分析）、舆情分析等
 ***
 ### 正则表达式
 ***
