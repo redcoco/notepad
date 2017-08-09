@@ -38,7 +38,7 @@ scrapy 信号
 ### IDE  pycharm的安装使用
 ### 数据库  mysql和navicat的安装和使用
 ### windows 和linux下安装python2 和python3
-### virtualenv 和 virtual恶女wrapper虚拟环境的安装和配置
+### virtualenv 和 virtualenvwrapper虚拟环境的安装和配置
 * pip install -i https://pypi.douan.com/simple/ virtualenv
 * pip uninstall virtualenv
 * pip install -i https://pypi.douan.com/simple/ virtualenvwrapper
@@ -67,6 +67,7 @@ scrapy 信号
 4. 数据分析（金融数据分析）、舆情分析等
 ***
 ### 正则表达式
+* 
 ***
 ### 深度优先和广度优先原理
 ***
