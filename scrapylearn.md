@@ -146,5 +146,6 @@ unicode将所有语言统一到一套编码里， ASCII 编码是美国标准编
 utf-8 变长编码 英文变长一个字节
 unicode利于数据处理，utf-8利于传输和保存，读文件转为unicode 保存文件转为utf-8
 python内部编码unicode，代码`u"我用python"`直接已经转为unicode
+python3直接把所有的都表示为unicode，不需要前面加u
 ***
 
