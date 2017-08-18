@@ -134,7 +134,17 @@ def level_queue(root):
 `
 ***
 ### url去重方法
+1.将url保存到数据库中，与数据库比对
+2.将url保存到set中，取决于内存大小限制，url很长的话占用很大内存空间
+3.url经过md5等方法哈希后保存到set中
+4.用bitmap方法，将访问过的url通过hash函数映射到某一位，冲突高
+5.bloomfilter方法对bitmap进行改进，多重hash函数降低冲突
+
 ***
 ### 彻底搞清楚unicode和utf8编码
+unicode将所有语言统一到一套编码里， ASCII 编码是美国标准编码，unicode比ASCII占用一倍空间
+utf-8 变长编码 英文变长一个字节
+unicode利于数据处理，utf-8利于传输和保存，读文件转为unicode 保存文件转为utf-8
+python内部编码unicode，代码`u"我用python"`直接已经转为unicode
 ***
 
