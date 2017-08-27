@@ -127,7 +127,9 @@ scrapy shell http://blog.jobbole.com/110287/
 > li:nth-child(2n) 选取第偶数个li元素
 > 
 
-    extract_first()不需要做异常处理 相对extract()[0]较安全
+    extract_first()不需要做异常处理 相对extract()[0]较安全,如出现下面的报错
+    praise_num = response.css('div.post-adds span h10::text').extract()[0]IndexError: list index out of range
+
 
 ----------
 
@@ -170,11 +172,43 @@ item实现统一各处的字段名称，可以路由到pipeline中处理
 ----------
 需要下载图片处理库：pip install -i https://pypi.douban.com/simple pillow
 
+----------
+
+### 数据表设计和保存item到json文件 ###
+
+----------
+    自己写pipeline:JsonFilePipeline
+    系统自带scrapy.exporters.JsonItemExporter
+    
 
 
 
+----------
+### 通过pipeline保存数据到mysql ###
+
+> pip install -i https://pypi.douban.com/simple mysqlclient
+
+同步插入MySQL：MysqlPipeline
+
+异步大并发插入mysql：
 
 
+      dbparms = dict(
+            host =settings["MYSQL_HOST"],
+            db = settings["MYSQL_DBNAME"],
+            user = settings["MYSQL_USER"],
+            password = settings["MYSQL_PASSWORD"],
+            charset = 'utf-8',
+            cursorclass = MySQLdb.cursors.DictCursor,
+            use_unicode  = True,
+        )
+        dbpool = adbapi.ConnectionPool("MySQLdb",**dbparms)
+
+    等同于：dbpool = adbapi.ConnectionPool("MySQLdb",host =settings["MYSQL_HOST"], db = settings["MYSQL_DBNAME"], user = settings["MYSQL_USER"])
+
+
+
+----------
 
 
 
