@@ -135,20 +135,40 @@ scrapy shell http://blog.jobbole.com/110287/
 
 ----------
 
-    a class="next page-numbers" href="http://blog.jobbole.com/all-posts/page/2/">下一页 »</a>
-		css提取只需去掉空格即 .next.page-numbers 否则代表不属于同一个class
+    <a class="next page-numbers" href="http://blog.jobbole.com/all-posts/page/2/">下一页 »</a>
+	css提取只需去掉空格即 .next.page-numbers 否则代表不属于同一个class
 
 
 
 ----------
+### items设计 ###
+
+----------
+
+item实现统一各处的字段名称，可以路由到pipeline中处理
+    
+    yield Request(url=parse.urljoin(response.url, post_url), callback=self.parse_detail,
+      meta={"front_image_url": image_url}) #通过meta信息传递自定义上层字段，传递到下层的response
+
+----------
+
+    ITEM_PIPELINES = {
+       'ArticleSpider.pipelines.ArticlespiderPipeline': 300,
+    # 'scrapy.pipelines.images.ImagesPipeline':1, #系统内置的图片下载类，下面相关的IMAGES_URLS_FIELD和IMAGES_STORE参数都是该类中的设置参数
+    'ArticleSpider.pipelines.JobboleImagesPipeline':1, #自定义的图片下载pipeline
+    }
+    IMAGES_URLS_FIELD="front_image_url"
+    project_dir = os.path.abspath(os.path.dirname(__file__))
+    IMAGES_STORE=os.path.join(project_dir,"images")
 
 
+----------
 
+    front_image_url = response.meta.get("front_image_url", "")
+    jobbole_item["front_image_url"] = [front_image_url] # 后台解析IMAGES_URLS_FIELD 是一个数组，所以需要转数组
 
-
-
-
-
+----------
+需要下载图片处理库：pip install -i https://pypi.douban.com/simple pillow
 
 
 
