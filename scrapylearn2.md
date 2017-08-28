@@ -209,7 +209,34 @@ item实现统一各处的字段名称，可以路由到pipeline中处理
 
 
 ----------
+### scrapy item loader机制 ###
 
+----------
+    item_loader = ItemLoader(item=JobboleItem(),response=response)
+    item_loader.add_css("title","div.entry-header h1::text")
+    # item_loader.add_xpath()
+    item_loader.add_value("url",response.url)
+	缺点无法自定义对字段的处理，如正则取评论条数字，可以转移到item中进行处理
+
+	
+	
+    front_image_url =scrapy.Field(input_processor=MapCompose()) 其中MapCompose可以接收任意多的函数
+
+----------
+
+    图片下载相对路径转换：if "http" not in front_image_url:
+    front_image_url = urljoin(get_base_url(response),front_image_url)
+
+----------
+    无法json话日期字段：
+    def date_cov(value):
+    try:
+    create_date = datetime.datetime.strptime(value, "%Y/%m/%d").date()
+    except Exception as e:
+    create_date = datetime.datetime.now().date()
+    return str(create_date)
+
+----------
 
 
 
