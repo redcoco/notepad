@@ -228,7 +228,7 @@ item实现统一各处的字段名称，可以路由到pipeline中处理
     front_image_url = urljoin(get_base_url(response),front_image_url)
 
 ----------
-    无法json话日期字段：
+    无法json化日期字段：
     def date_cov(value):
     try:
     create_date = datetime.datetime.strptime(value, "%Y/%m/%d").date()
@@ -238,13 +238,3 @@ item实现统一各处的字段名称，可以路由到pipeline中处理
 
 ----------
 
-
-
-
-
-
-	| 表达式        | 说明    |  数量  |
-    | --------   | -----:   | :----: |
-    | 香蕉        | $1      |   5    |
-    | 苹果        | $1      |   6    |
-    | 草莓        | $1      |   7    |
