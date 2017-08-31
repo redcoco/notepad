@@ -139,7 +139,7 @@ scrapy shell http://blog.jobbole.com/110287/
 
     <a class="next page-numbers" href="http://blog.jobbole.com/all-posts/page/2/">下一页 »</a>
 	css提取只需去掉空格即 .next.page-numbers 否则代表不属于同一个class
-
+spider类入口函数def start_requests(self) 默认返回处理函数def parse(self, response):
 
 
 ----------
@@ -235,6 +235,163 @@ item实现统一各处的字段名称，可以路由到pipeline中处理
     except Exception as e:
     create_date = datetime.datetime.now().date()
     return str(create_date)
+
+----------
+# 第5章 scrapy爬去知名问答网站 #
+
+----------
+###  session和cookie自动登录机制 ###
+
+----------
+
+
+- 无状态请求：请求之间无关系，各部干涉
+- 有状态请求：登录可见内容，有关系的请求
+- 不能跨域访问，存在域名下的cookie，客户端自动发送cookie，并与服务器互相验证，发回相应用户内容
+- 服务器自动分配的id，session-id可以认为是用户名，直接验证登录
+
+### requests模拟登陆知乎 ###
+
+----------
+#### 常见httpcode ####
+- 200 请求被成功处理
+- 301/302 永久性重定向/临时性重定向
+- 403 没有权限的访问
+- 404 表示没有对应资源
+- 500 服务器错误
+- 503 服务器停机或正在维护
+
+pip install -i https://pypi.douban.com/simple requests
+
+
+----------
+
+### scrapy模拟知乎登录 ###
+----------
+    只匹配一行需要加参数re.DOTALL
+    match_obj = re.match('.*name="_xsrf" value="(.*?)"', response.text,re.DOTALL)
+
+    scrapy模拟登陆和request模拟登陆类似
+    def start_requests 函数实现第一登陆提取xsrf，回调login
+    def login(self,response) 实现表单提交，登陆功能，回调check_login是否登陆成功
+    def check_login(self,response):实现验证登陆是否成功，如果成功则回调解析函数parse，默认回调parse
+    注：scrapy自动保存cookie信息，check_login处自动保存
+
+----------
+### (补充小节)知乎验证码登录 ###
+
+----------
+    
+    验证码图片地址：当前时间*1000转换int
+    t = str(int(time.time() * 1000))
+    captcha_url = "https://www.zhihu.com/captcha.gif?r={0}&type=login".format(t)
+    t = session.get(captcha_url, headers=header)
+    session不能改为request，否则失败，原因是不带cookie
+
+集成到scrapy中需要注意session与cookie的传递，保证同一session下的登陆
+
+    import time
+    t = str(int(time.time() * 1000))
+    captcha_url = "https://www.zhihu.com/captcha.gif?r={0}&type=login".format(t)
+    yield scrapy.Request(captcha_url, headers=self.headers, meta={"post_data": post_data},
+     callback=self.login_after_captcha)
+
+----------
+
+
+### 知乎分析以及数据表设计 ###
+
+----------
+> scrapy shell -s USER-AGENT="Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.90 Safari/537.36"  "https://www.zhihu.com/question/57834705"
+> 需要user-agent的访问添加参数方式
+
+
+
+----------
+### item loder方式提取question ###
+
+----------
+scrapy 默认深度优先算法
+
+
+
+----------
+### 知乎spider爬虫逻辑的实现以及answer的提取 ###
+
+----------
+    item_load.add_css("title", '.zh-question-title h2 a::text')
+    可能在span或者a标签里，但是css选择器无法实现或的选择改为xpath
+    item_load.add_xpath("title",'//*[@id="zh-question-title"]/h2/a/text()|//*[@id="zh-question-title"]/h2/span/text()')
+
+
+----------
+### 保存数据到mysql中 ###
+
+----------
+    item.__class__.__name__ == "JobboleItem"并不实用
+    
+    如果在pipeline中写sql语句：
+    多个spider不可公用
+    def do_insert(self, cursor, item):
+    insert_sql = """
+    insert into jobbole () VALUES (%s,%s,%s,%s)
+    """
+    self.cursor.execute(insert_sql, (
+    item["title"], item["create_date"], item["fav_nums"], item["content"], item["tags"], item["comment_nums"],
+    item["praise_num"], item["front_image_url"]))
+    
+    如何解决多个spider公用pipeline并实现不同sql调用：
+    
+    def do_insert(self, cursor, item):
+    insert_sql,params = item.get_insert_sql()
+    self.cursor.execute(insert_sql,params)
+
+----------
+# 第6章 通过CrawlSpider对招聘网站进行整站爬取 #
+
+----------
+### 数据表结构设计 ###
+
+
+----------
+
+### CrawlSpider源码分析 ###
+
+----------
+    scrapy genspider --list 列出可用模板
+    scrapy genspider -t crawl lagou www.lagou.com 使用指定模板生成spider
+    
+    import os
+    import sys
+    sys.path.insert(0,'e:\linux') #将该路径加入到pythonpath中
+    
+    继承CrawlSpider不能覆盖parse函数，否则rule无法使用，可以重载parse_start_url实现替代parse函数
+    
+    def set_crawler(self, crawler):
+    super(CrawlSpider, self).set_crawler(crawler)
+    self._follow_links = crawler.settings.getbool('CRAWLSPIDER_FOLLOW_LINKS', True) #CRAWLSPIDER_FOLLOW_LINKS在settings设置为false时，rules = (
+    Rule(LinkExtractor(allow=r'Items/'), callback='parse_item', follow=True),
+    )   则失效
+    
+
+
+
+----------
+### Rule和LinkExtractor使用 ###
+
+----------
+
+
+----------
+### item loader方式解析职位 ###
+
+----------
+
+----------
+### 职位数据入库 ###
+
+
+----------
 
 ----------
 
