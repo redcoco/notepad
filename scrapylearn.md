@@ -11,6 +11,9 @@
 5. scrapy redis 分布式爬虫
 6. elasticsearch  django 实现搜索引擎
 
+[*可以互相对照cnblogs.com参考日志，与本文类似*](http://www.cnblogs.com/adc8868/category/829451.html)
+
+
 ----------
 ###  爬虫基础知识 ###
 1. 正则表达式
