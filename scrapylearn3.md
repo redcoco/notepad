@@ -488,7 +488,7 @@ request队列集中管理
 
 安装依赖包：
 
-　　pip install mmh3
+　　pip install mmh3 由于这种方式安装不到源码，可以通过pycharm添加mmh3的包即可
 
     py_bloomfilter.py(布隆过滤器)源码
     import mmh3
