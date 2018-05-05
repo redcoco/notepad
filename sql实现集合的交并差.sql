@@ -20,3 +20,30 @@ FROM
 	LEFT JOIN test2 AS T2 ON T1.col1 = T2.col2 
 WHERE
 	T2.col2 IS NULL;
+
+
+--2.交集
+
+SELECT	* FROM	test1 
+INTERSECT
+SELECT	* FROM	test2;
+
+SELECT
+	T1.*,
+	T2.* 
+FROM
+	test1 AS T1
+INNER JOIN test2 AS T2 
+ON T1.col1 = T2.col2 
+
+
+--3.并集
+
+SELECT	* FROM	test1 
+UNION
+SELECT	* FROM	test2;
+
+--注意union all 不去重并非交集概念
+SELECT	* FROM	test1 
+UNION ALL
+SELECT	* FROM	test2;
